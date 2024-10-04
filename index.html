@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contract Preview</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .contract-preview {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contract-section {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .contract-text {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .signature-output {
+      display: block;
+      margin-top: 20px;
+      border: 1px solid #000;
+      width: 200px;
+      height: 100px;
+    }
+
+    /* Style for Agree Button */
+    .agree-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 18px;
+      color: #fff;
+      background-color: #28a745;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .agree-button:hover {
+      background-color: #218838;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .logo-img {
+      max-width: 150px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="masi.png" alt="Logo" class="logo-img">
+  </div>
+  <h2>Website Service Agreement</h2>
+  
+  <!-- Contract Preview Section -->
+  <div class="contract-preview">
+    <p>This Website Service Agreement ("Agreement") is made and entered into as of <span id="preview-date"></span> ("Effective Date") by and between:</p>
+
+    <p><strong>1. Service Provider:</strong> Mara Masita</p>
+    <p>Phone: 0716145925</p>
+    <p>Instagram: x_cool_msa2</p>
+
+    <p><strong>2. Client:</strong> <span id="preview-client-name"></span></p>
+    <p>Brand: <span id="preview-brand-name"></span></p>
+    <p>Phone: <span id="preview-client-phone"></span></p>
+    <p>Instagram: <span id="preview-client-instagram"></span></p>
+
+    <p class="contract-section">1. Services</p>
+    <p class="contract-text">The Service Provider agrees to provide website editing and updating services to the Client for a period of two (2) years from the Effective Date.</p>
+
+    <p class="contract-section">2. Limitations</p>
+    <p class="contract-text">The Client acknowledges that the Service Provider will provide services only for the website and does not include domain registration.</p>
+
+    <p class="contract-section">3. Payment Terms</p>
+    <p class="contract-text">
+      a. The Client agrees to pay a total fee for services rendered.<br>
+      b. The payment will be made on a monthly basis, commencing one month after the initial deposit.<br>
+      c. To start the agreement, the Client agrees to pay a deposit of $50, which will be applied to the first month's service fee.
+    </p>
+
+    <p class="contract-section">4. Termination</p>
+    <p class="contract-text">Either party may terminate this Agreement by providing written notice to the other party at least thirty (30) days in advance.</p>
+
+    <p class="contract-section"> 5.No hard feeling</p>
+    <p class="contract-text">This Agreement shall always be honest and pleasure <span id="preview-state"></span>.</p>
+
+    <p class="contract-section">6. Entire Agreement</p>
+    <p class="contract-text">This Agreement constitutes the entire understanding between the parties regarding the subject matter hereof and supersedes all prior agreements, whether written or oral.</p>
+
+    <p class="contract-section">Client's Signature:</p>
+    <img id="signature-output" class="signature-output" alt="Client's Digital Signature">
+
+    <!-- Agree Button -->
+    <button class="agree-button" onclick="agreeAndProceed()">Agree</button>
+  </div>
+
+  <script>
+    // Retrieve form data and display in preview
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const clientName = urlParams.get('client-name');
+    const brandName = urlParams.get('brand-name');
+    const clientPhone = urlParams.get('client-phone');
+    const clientInstagram = urlParams.get('client-instagram');
+
+    document.getElementById('preview-client-name').textContent = clientName;
+    document.getElementById('preview-brand-name').textContent = brandName;
+    document.getElementById('preview-client-phone').textContent = clientPhone;
+    document.getElementById('preview-client-instagram').textContent = clientInstagram;
+    document.getElementById('preview-date').textContent = new Date().toLocaleDateString();
+
+    // Redirect to index.html when the user agrees
+    function agreeAndProceed() {
+      alert("You have agreed to the terms. Proceeding to the website...");
+      window.location.href = 'contract.html';
+    }
+  </script>
+</body>
+</html>

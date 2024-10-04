@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Service Agreement</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+
+    .signature-picture-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .signature-pad {
+      border: 2px solid #000;
+      width: 48%;
+      height: 200px;
+    }
+
+    .picture-output {
+      width: 48%;
+      height: 200px;
+      border: 2px solid #000;
+      object-fit: cover;
+    }
+
+    .signature-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .contract-preview {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #000;
+      background-color: #fff;
+    }
+
+    .contract-output-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .signature-output {
+      width: 48%;
+      height: 100px;
+      border: 2px solid #000;
+    }
+
+    .picture-output-preview {
+      width: 48%;
+      height: 200px;
+      border: 2px solid #000;
+      object-fit: cover;
+    }
+
+    .contract-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .contract-section {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .logo-img {
+      max-width: 150px;
+      height: auto;
+    }
+
+    .generate-pdf-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      form, .contract-preview {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .signature-picture-wrapper, .contract-output-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .signature-pad, .picture-output, .signature-output, .picture-output-preview {
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="masi.png" alt="Logo" class="logo-img">
+  </div>
+  <h1>Website Service Agreement</h1>
+
+  <!-- Form Section -->
+  <form id="contract-form">
+    <label for="client-name">Client's Name</label>
+    <input type="text" id="client-name" name="client-name" required>
+  
+    <label for="brand-name">Client's Brand Name</label>
+    <input type="text" id="brand-name" name="brand-name" required>
+  
+    <label for="client-phone">Client's Phone Number</label>
+    <input type="tel" id="client-phone" name="client-phone" required>
+  
+    <label for="client-instagram">Client's Instagram</label>
+    <input type="text" id="client-instagram" name="client-instagram" required>
+  
+    <label for="client-picture">Upload a Picture of Yourself</label>
+    <input type="file" id="client-picture" name="client-picture" accept="image/*" required>
+
+    <!-- Signature Pad Section -->
+    <label>Client's Digital Signature</label>
+    <canvas id="signature-pad" class="signature-pad"></canvas>
+    <div class="signature-actions">
+      <button type="button" id="clear-signature">Clear Signature</button>
+    </div>
+
+    <button type="submit">Generate Contract</button>
+  </form>
+
+  <!-- Contract Preview Section -->
+  <div class="contract-preview" id="contract-preview">
+    <p>This Website Service Agreement ("Agreement") is made and entered into as of <span id="preview-date"></span> ("Effective Date") by and between:</p>
+
+    <p><strong>1. Service Provider:</strong> Mara Masita</p>
+    <p>Phone: 0716145925</p>
+    <p>Instagram: x_cool_msa2</p>
+
+    <p><strong>2. Client:</strong> <span id="preview-client-name"></span></p>
+    <p>Brand: <span id="preview-brand-name"></span></p>
+    <p>Phone: <span id="preview-client-phone"></span></p>
+    <p>Instagram: <span id="preview-client-instagram"></span></p>
+
+    <div class="contract-section">1. Services</div>
+    <div class="contract-text">The Service Provider agrees to provide website editing and updating services to the Client for a period of two (2) years from the Effective Date.</div>
+
+    <div class="contract-section">2. Limitations</div>
+    <div class="contract-text">The Client acknowledges that the Service Provider will provide services only for the website and does not include domain registration.</div>
+
+    <div class="contract-section">3. Payment Terms</div>
+    <div class="contract-text">
+      a. The Client agrees to pay a total fee for services rendered.<br>
+      b. The payment will be made on a monthly basis, commencing one month after the initial deposit of $50.<br>
+      c. The deposit of $50 will be applied to the first month's service fee.
+    </div>
+
+    <div class="contract-section">4. Termination</div>
+    <div class="contract-text">Either party may terminate this Agreement by providing written notice to the other party at least thirty (30) days in advance.</div>
+
+    <div class="contract-section"> 5.No hard feeling" 
+          
+    <div class="contract-text"> "This Agreement shall always be honest and pleasure"</div>
+
+    <div class="contract-section">6. Entire Agreement</div>
+    <div class="contract-text">This Agreement constitutes the entire understanding between the parties regarding the subject matter hereof and supersedes all prior agreements, whether written or oral.</div>
+
+    <div class="contract-output-wrapper">
+      <div>
+        <strong>Client's Signature:</strong>
+        <img id="signature-output" class="signature-output" alt="Client's Digital Signature">
+      </div>
+
+      <div>
+        <strong>Client's Uploaded Picture:</strong>
+        <img id="picture-output-preview" class="picture-output-preview" alt="Client's Uploaded Picture">
+      </div>
+    </div>
+  </div>
+
+  <!-- Generate PDF Button -->
+  <button class="generate-pdf-btn" id="generate-pdf-btn">Generate as PDF</button>
+
+  <script>
+    // Canvas for signature
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    const clearBtn = document.getElementById('clear-signature');
+    let isDrawing = false;
+
+    // Setup Signature pad event listeners
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mousemove', draw);
+
+    // Functions for signature drawing
+    function startDrawing(e) {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    }
+
+    function stopDrawing() {
+        isDrawing = false;
+        ctx.closePath();
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+
+    // Clear the signature pad
+    clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // Handle form submission
+    const form = document.getElementById('contract-form');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Preview contract data
+        document.getElementById('preview-client-name').textContent = document.getElementById('client-name').value;
+        document.getElementById('preview-brand-name').textContent = document.getElementById('brand-name').value;
+        document.getElementById('preview-client-phone').textContent = document.getElementById('client-phone').value;
+        document.getElementById('preview-client-instagram').textContent = document.getElementById('client-instagram').value;
+
+        const date = new Date();
+        document.getElementById('preview-date').textContent = date.toLocaleDateString();
+
+        // Display signature
+        const signatureDataURL = canvas.toDataURL();
+        document.getElementById('signature-output').src = signatureDataURL;
+
+        // Handle picture upload
+        const pictureInput = document.getElementById('client-picture');
+        const pictureFile = pictureInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('picture-output-preview').src = e.target.result;
+        }
+
+        reader.readAsDataURL(pictureFile);
+
+        // Show contract preview
+        document.getElementById('contract-preview').style.display = 'block';
+    });
+
+    // Generate PDF
+// Generate PDF
+document.getElementById('generate-pdf-btn').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add logo to the center
+    const logo = new Image();
+    logo.src = 'masi.png';  // Your logo file path
+    logo.onload = function() {
+        // Adjust the position of the logo at the top center
+        doc.addImage(logo, 'PNG', 70, 10, 70, 30);  // Adjust positioning and size as needed
+
+        // Add title and contract details
+        doc.setFont("Poppins");
+        doc.setFontSize(10);
+        doc.text("Website Service Agreement", 105, 50, null, null, "center"); // Adjust position below the logo
+
+        doc.setFontSize(12);
+        doc.text(`Effective Date: ${document.getElementById('preview-date').textContent}`, 10, 60);
+        doc.text(`Service Provider: Mara Masita`, 10, 70);
+        doc.text(`Client's Name: ${document.getElementById('preview-client-name').textContent}`, 10, 80);
+        doc.text(`Brand: ${document.getElementById('preview-brand-name').textContent}`, 10, 90);
+        doc.text(`Phone: ${document.getElementById('preview-client-phone').textContent}`, 10, 100);
+        doc.text(`Instagram: ${document.getElementById('preview-client-instagram').textContent}`, 10, 110);
+
+        // Add other sections with proper spacing
+        const sections = [
+        { 
+            title: "1. Services", 
+            content: [
+                "The Service Provider agrees to provide website editing services to the Client.", 
+                "The Service Provider also agrees to provide website updating services.", 
+                "These services will be provided for a period of two (2) years from the Effective Date." 
+            ] 
+        },
+        { 
+            title: "2. Limitations", 
+            content: [
+                "The Client acknowledges that the Service Provider will provide services only for the website.", 
+                "Domain registration is not included in the services provided." 
+            ] 
+        },
+        { 
+            title: "3. Payment Terms", 
+            content: [
+                "a. The Client agrees to pay a total fee for services rendered.", 
+                "b. Payment will be made on a monthly basis, commencing one month after the initial deposit of $50.", 
+                "c. The deposit of $50 will be applied to the first month's service fee."
+            ] 
+        },
+        { 
+            title: "4. Termination", 
+            content: [
+                "Either party may terminate this Agreement.", 
+                "Written notice must be provided to the other party at least thirty (30) days in advance."
+            ] 
+        },
+        { 
+            title: "5. No hard feeling", 
+            content: [
+                "This Agreement shall always be honest and pleasure"
+            ] 
+        },
+        { 
+            title: "6. Entire Agreement", 
+            content: [
+                "This Agreement constitutes the entire understanding between the parties regarding the subject matter hereof.", 
+                "It supersedes all prior agreements, whether written or oral."
+            ] 
+        },
+    ];
+    
+        
+
+        let currentY = 120;  // Adjust starting Y position
+        sections.forEach(section => {
+            doc.text(section.title, 10, currentY);
+            currentY += 5;
+            doc.text(section.content, 10, currentY);
+            currentY += 15;  // space between sections
+        });
+
+        // Add Signature and Picture side by side
+        doc.text("Client's Signature:", 10, currentY);
+        const signatureDataURL = document.getElementById('signature-output').src;
+        doc.addImage(signatureDataURL, 'PNG', 10, currentY + 10, 60, 30);  // Position signature
+
+        doc.text("Client's Uploaded Picture:", 80, currentY);
+        const pictureDataURL = document.getElementById('picture-output-preview').src;
+        doc.addImage(pictureDataURL, 'PNG', 80, currentY + 10, 60, 30);  // Position picture next to signature
+
+        // Save PDF
+        doc.save('website_service_agreement.pdf');
+    };
+});
+
+  </script>
+</body>
+</html>
